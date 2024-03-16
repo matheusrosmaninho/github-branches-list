@@ -60,7 +60,7 @@ func GetListBranches(owner string, repo string) (*ListBranchesResponse, error) {
 	for key, value := range headers {
 		req.Header.Add(key, value)
 	}
-	req.Header.Add("Authorization", os.Getenv("GITHUB_TOKEN"))
+	req.Header.Add("Authorization", os.Getenv("INPUT_REPO_TOKEN"))
 	resp, err := client.Do(req)
 	if err != nil {
 		return nil, errors.New("error making request")
@@ -94,7 +94,7 @@ func GetBranchDetails(owner string, repo string, branch string) (*DetailBranchRe
 	for key, value := range headers {
 		req.Header.Add(key, value)
 	}
-	req.Header.Add("Authorization", os.Getenv("GITHUB_TOKEN"))
+	req.Header.Add("Authorization", os.Getenv("INPUT_REPO_TOKEN"))
 	resp, err := client.Do(req)
 	if err != nil {
 		return nil, errors.New("error making request of details branch")
