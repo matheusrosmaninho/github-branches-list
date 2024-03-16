@@ -16,6 +16,17 @@ O projeto GitHub Branches List é uma aplicação que lista as branches de um re
 
 Contribuições são bem-vindas! Sinta-se à vontade para abrir uma issue ou enviar um pull request.
 
+## Uso
+
+```
+- name: List branches details
+  uses: matheusrosmaninho/github-branches-list@1.0
+  with:
+    repo_token: ${{ secrets.GITHUB_TOKEN }}
+    repo: ${{ github.repository }}
+    owner: ${{ github.repository_owner }}
+```
+
 ## Licença
 
 Este projeto está licenciado sob a [MIT License](LICENSE).
