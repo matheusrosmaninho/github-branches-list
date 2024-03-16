@@ -3,7 +3,6 @@ package services
 import (
 	"encoding/json"
 	"errors"
-	"fmt"
 	"io"
 	"net/http"
 	"os"
@@ -64,6 +63,40 @@ func GetListBranches(owner string, repo string) (*ListBranchesResponse, error) {
 	req.Header.Add("Authorization", os.Getenv("GITHUB_TOKEN"))
 	resp, err := client.Do(req)
 	if err != nil {
+		return nil, errors.New("error making request")
+	}
+	defer resp.Body.Close()
+
+	if resp.StatusCode < 200 || resp.StatusCode > 299 {
+		return nil, errors.New("error in response")
+	}
+	body, err := io.ReadAll(resp.Body)
+	if err != nil {
+		return nil, errors.New("error reading response")
+	}
+	err = json.Unmarshal(body, &branches)
+	if err != nil {
+		return nil, errors.New("error unmarshalling response")
+	}
+	return &branches, nil
+}
+
+func GetBranchDetails(owner string, repo string, branch string) (*DetailBranchResponse, error) {
+	var branchDetails DetailBranchResponse
+	url := GITHUB_API_URL + "/repos/" + owner + "/" + repo + "/branches/" + branch
+
+	client := &http.Client{}
+	req, err := http.NewRequest("GET", url, nil)
+	if err != nil {
+		return nil, errors.New("Error creating request")
+	}
+
+	for key, value := range headers {
+		req.Header.Add(key, value)
+	}
+	req.Header.Add("Authorization", os.Getenv("GITHUB_TOKEN"))
+	resp, err := client.Do(req)
+	if err != nil {
 		return nil, errors.New("Error making request")
 	}
 	defer resp.Body.Close()
@@ -75,10 +108,9 @@ func GetListBranches(owner string, repo string) (*ListBranchesResponse, error) {
 	if err != nil {
 		return nil, errors.New("Error reading response")
 	}
-	fmt.Println(string(body))
-	err = json.Unmarshal(body, &branches)
+	err = json.Unmarshal(body, &branchDetails)
 	if err != nil {
 		return nil, errors.New("error unmarshalling response")
 	}
-	return &branches, nil
+	return &branchDetails, nil
 }
