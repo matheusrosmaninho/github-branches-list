@@ -5,16 +5,10 @@ import (
 	"log"
 	"os"
 
-	"github.com/joho/godotenv"
 	"github.com/matheusrosmaninho/github-branches-list/services"
 )
 
 func main() {
-	err := godotenv.Load()
-	if err != nil {
-		log.Fatal("Erro ao carregar o arquivo .env")
-	}
-
 	branches, err := services.GetListBranches(os.Getenv("INPUT_OWNER"), os.Getenv("INPUT_REPO"))
 	if err != nil {
 		log.Fatal(err)
