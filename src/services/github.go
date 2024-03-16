@@ -54,7 +54,7 @@ func GetListBranches(owner string, repo string) (*ListBranchesResponse, error) {
 	client := &http.Client{}
 	req, err := http.NewRequest("GET", url, nil)
 	if err != nil {
-		return nil, errors.New("Error creating request")
+		return nil, errors.New("error creating request")
 	}
 
 	for key, value := range headers {
@@ -68,7 +68,7 @@ func GetListBranches(owner string, repo string) (*ListBranchesResponse, error) {
 	defer resp.Body.Close()
 
 	if resp.StatusCode < 200 || resp.StatusCode > 299 {
-		return nil, errors.New("error in response")
+		return nil, errors.New("error in response: " + resp.Status)
 	}
 	body, err := io.ReadAll(resp.Body)
 	if err != nil {
@@ -88,7 +88,7 @@ func GetBranchDetails(owner string, repo string, branch string) (*DetailBranchRe
 	client := &http.Client{}
 	req, err := http.NewRequest("GET", url, nil)
 	if err != nil {
-		return nil, errors.New("Error creating request")
+		return nil, errors.New("error creating request of details branch")
 	}
 
 	for key, value := range headers {
@@ -97,20 +97,20 @@ func GetBranchDetails(owner string, repo string, branch string) (*DetailBranchRe
 	req.Header.Add("Authorization", os.Getenv("GITHUB_TOKEN"))
 	resp, err := client.Do(req)
 	if err != nil {
-		return nil, errors.New("Error making request")
+		return nil, errors.New("error making request of details branch")
 	}
 	defer resp.Body.Close()
 
 	if resp.StatusCode < 200 || resp.StatusCode > 299 {
-		return nil, errors.New("Error in response")
+		return nil, errors.New("error in response of details branch: " + resp.Status)
 	}
 	body, err := io.ReadAll(resp.Body)
 	if err != nil {
-		return nil, errors.New("Error reading response")
+		return nil, errors.New("error reading response of details branch:" + resp.Status)
 	}
 	err = json.Unmarshal(body, &branchDetails)
 	if err != nil {
-		return nil, errors.New("error unmarshalling response")
+		return nil, errors.New("error unmarshalling response of details branch: " + resp.Status + " - " + string(body))
 	}
 	return &branchDetails, nil
 }
