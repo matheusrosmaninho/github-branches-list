@@ -20,7 +20,7 @@ Contribuições são bem-vindas! Sinta-se à vontade para abrir uma issue ou env
 
 ```
 - name: List branches details
-  uses: matheusrosmaninho/github-branches-list@1.0
+  uses: matheusrosmaninho/github-branches-list@v1
   with:
     repo_token: ${{ secrets.GITHUB_TOKEN }}
     repo: ${{ github.repository }}
