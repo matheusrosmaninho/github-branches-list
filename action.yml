@@ -1,0 +1,19 @@
+name: "List branches details"
+description: "List all branches in the repository and their details"
+inputs:
+  repo_token:
+    description: "The token to use for authentication"
+    required: true
+  repo:
+    description: "The repository to list branches from"
+    required: true
+  owner:
+    description: "The owner of the repository"
+    required: true
+runs:
+  using: "docker"
+  image: "Dockerfile"
+  args:
+    - ${{ inputs.repo_token }}
+    - ${{ inputs.repo }}
+    - ${{ inputs.owner }}
